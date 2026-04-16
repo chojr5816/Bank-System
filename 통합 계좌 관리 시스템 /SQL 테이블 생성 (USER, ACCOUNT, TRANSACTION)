@@ -1,0 +1,28 @@
+-- 1. 사용자 테이블 생성 
+CREATE TABLE users (
+    user_id VARCHAR2(20) PRIMARY KEY,
+    password VARCHAR2(20) NOT NULL,
+    user_name VARCHAR2(50) NOT NULL,
+    phone VARCHAR2(20),
+    is_admin CHAR(1) DEFAULT 'N'
+);
+
+-- 2. 계좌 테이블 생성
+CREATE TABLE account (
+    account_number VARCHAR2(30) PRIMARY KEY,
+    user_id VARCHAR2(20) REFERENCES users(user_id),
+    bank_name VARCHAR2(30) NOT NULL,
+    balance NUMBER DEFAULT 0,
+    alias VARCHAR2(50),
+    created_at DATE DEFAULT SYSDATE
+);
+
+-- 3. 거래내역 테이블 생성
+CREATE TABLE transaction (
+    transaction_id NUMBER GENERATED AS IDENTITY PRIMARY KEY, -- 자동 증가 번호
+    account_number VARCHAR2(30) REFERENCES account(account_number),
+    type VARCHAR2(20), -- 입금, 출금, 이체
+    amount NUMBER,
+    target_account VARCHAR2(30),
+    transaction_date DATE DEFAULT SYSDATE
+);
